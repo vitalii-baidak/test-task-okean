@@ -1,5 +1,5 @@
 import mockApiData from './mockApiData.json';
-import { SalesList, ExpenseList } from "@/shared/MockApiService.types";
+import { SalesList, ExpenseList } from "@/shared/api/MockApiService.types";
 
 export default {
   async fetchSalesData(): Promise<SalesList> {

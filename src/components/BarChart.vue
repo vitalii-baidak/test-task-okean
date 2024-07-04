@@ -1,18 +1,13 @@
 <template>
   <v-card :loading="loading">
     <v-card-text>
-      <div class="d-flex justify-space-between align-center mb-4">
-        <p class="text-h5 text-center">
-          {{ loading ? 'Loading...' : title }}
-        </p>
-
-        <div>
-          <SelectSortType v-model="sortValue" />
-        </div>
-      </div>
+      <SortHeader
+        v-model="sortValue"
+        :title="loading ? 'Loading...' : title"
+      />
 
       <div>
-        <Bar :data="chartData" :options="chartConfig" />
+        <Bar :data="chartData" :options="chartJsDefaultOptions" />
       </div>
     </v-card-text>
   </v-card>
@@ -24,9 +19,10 @@ import { ref, computed } from "vue";
 import { sortObjectDataByKey } from "@/composables/sortObjectDataByKey";
 
 import { Bar } from 'vue-chartjs';
+import { chartJsDefaultOptions } from '@/shared/configs';
 import { Chart, Title, Tooltip, BarElement, CategoryScale, LinearScale } from 'chart.js';
 
-import SelectSortType, { SortVariants } from './SelectSortType.vue';
+import SortHeader, { SortVariants } from './SortHeader.vue';
 
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
 
@@ -62,11 +58,6 @@ const sortedData = computed<BarChartPoint[]>(() => {
 // Chart data
 
 const theme = useTheme();
-
-const chartConfig = {
-  responsive: true,
-  maintainAspectRatio: false
-};
 
 const chartData = computed(() => {
   const labels = sortedData.value.map(item => item.label);

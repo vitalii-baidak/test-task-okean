@@ -16,10 +16,10 @@
 </template>
 
 <script setup lang="ts">
-import MockApiService from "@/shared/MockApiService";
+import MockApiService from "@/shared/api/MockApiService";
 
 import { ref, onBeforeMount } from 'vue';
-import { SalesList, ExpenseList } from "@/shared/MockApiService.types";
+import { SalesList, ExpenseList } from "@/shared/api/MockApiService.types";
 
 import BarChart, { BarChartPoint } from '@/components/BarChart.vue';
 import LineChart, { LineChartPoint } from '@/components/LineChart.vue';

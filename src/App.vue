@@ -8,9 +8,11 @@
 
   <v-app>
     <v-main>
-      Hello!
+      <DashboardView />
     </v-main>
   </v-app>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import DashboardView from "@/views/DashboardView.vue";
+</script>

@@ -1,8 +1,8 @@
 <template>
-  <v-card>
+  <v-card :loading="loading">
     <v-card-text>
       <p class="text-body-1 text-center mb-3">
-        {{ title }}
+        {{ loading ? 'Loading...' : title }}
       </p>
 
       <div>
@@ -27,9 +27,10 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Too
 // Props
 
 const props = defineProps<{
-  title: string
-  labels: string[]
-  values: number[]
+  title: string;
+  labels: string[];
+  values: number[];
+  loading?: boolean;
 }>();
 
 // Chart

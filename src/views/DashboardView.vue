@@ -1,33 +1,90 @@
 <template>
   <v-container class="dashboard-view-container">
-    <LineChart title="Sales" :labels="salesData.labels" :values="salesData.values" />
+    <LineChart
+      title="Sales"
+      :labels="salesData.labels"
+      :values="salesData.values"
+      :loading="isSalesDataLoading"
+    />
 
-    <BarChart class="mt-4" title="Expense" :labels="expenseData.labels" :values="expenseData.values" />
+    <BarChart
+      class="mt-4"
+      title="Expense"
+      :labels="expenseData.labels"
+      :values="expenseData.values"
+      :loading="isExpenseDataLoading"
+    />
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import mockChartsData from '@/shared/mockChartsData.json';
+import MockApiService from "@/shared/MockApiService";
+
+import { ref, onBeforeMount } from 'vue';
+import { SalesList, ExpenseList } from "@/shared/MockApiService.types";
 
 import BarChart from '@/components/BarChart.vue';
 import LineChart from '@/components/LineChart.vue';
 
-// Charts data
+// Fetch sales data
 
-const salesData = computed(() => {
-  return {
-    labels: mockChartsData.salesData.map(salesItem => salesItem.month),
-    values: mockChartsData.salesData.map(salesItem => salesItem.sales),
-  }
+onBeforeMount(fetchSalesData);
+
+const isSalesDataLoading = ref<boolean>(false);
+
+const salesData = ref<{ labels: string[]; values: number[] }>({
+  labels: [],
+  values: []
 });
 
-const expenseData = computed(() => {
-  return {
-    labels: mockChartsData.expenseData.map(salesItem => salesItem.category),
-    values: mockChartsData.expenseData.map(salesItem => salesItem.amount),
-  }
+async function fetchSalesData() {
+  isSalesDataLoading.value = true;
+
+  await MockApiService.fetchSalesData()
+    .then(salesData => {
+      setSalesData(salesData);
+    })
+    .catch(error => {
+      console.log(error.message);
+    });
+
+  isSalesDataLoading.value = false;
+}
+
+function setSalesData(salesList: SalesList) {
+  salesData.value.labels = salesList.map(salesItem => salesItem.month);
+  salesData.value.values = salesList.map(salesItem => salesItem.sales);
+}
+
+// Fetch expense data
+
+onBeforeMount(fetchExpenseData);
+
+const isExpenseDataLoading = ref<boolean>(false);
+
+const expenseData = ref<{ labels: string[]; values: number[] }>({
+  labels: [],
+  values: []
 });
+
+async function fetchExpenseData() {
+  isExpenseDataLoading.value = true;
+
+  await MockApiService.fetchExpenseData()
+    .then(expenseData => {
+      setExpenseData(expenseData);
+    })
+    .catch(error => {
+      console.log(error.message);
+    });
+
+  isExpenseDataLoading.value = false;
+}
+
+function setExpenseData(salesList: ExpenseList) {
+  expenseData.value.labels = salesList.map(salesItem => salesItem.category);
+  expenseData.value.values = salesList.map(salesItem => salesItem.amount);
+}
 </script>
 
 <style scoped>

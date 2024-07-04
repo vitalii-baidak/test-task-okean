@@ -2,9 +2,7 @@
   <v-container class="dashboard-view-container">
     <LineChart title="Sales" :labels="salesData.labels" :values="salesData.values" />
 
-    <div class="mt-3">
-      <BarChart />
-    </div>
+    <BarChart class="mt-4" title="Expense" :labels="expenseData.labels" :values="expenseData.values" />
   </v-container>
 </template>
 
@@ -21,6 +19,13 @@ const salesData = computed(() => {
   return {
     labels: mockChartsData.salesData.map(salesItem => salesItem.month),
     values: mockChartsData.salesData.map(salesItem => salesItem.sales),
+  }
+});
+
+const expenseData = computed(() => {
+  return {
+    labels: mockChartsData.expenseData.map(salesItem => salesItem.category),
+    values: mockChartsData.expenseData.map(salesItem => salesItem.amount),
   }
 });
 </script>

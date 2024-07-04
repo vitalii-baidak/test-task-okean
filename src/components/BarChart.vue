@@ -23,10 +23,14 @@ Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
 
 // Props
 
+export type BarChartPoint = {
+  label: string;
+  value: number;
+};
+
 const props = defineProps<{
+  data: BarChartPoint[];
   title: string;
-  labels: string[];
-  values: number[];
   loading?: boolean;
 }>();
 
@@ -39,11 +43,18 @@ const chartConfig = {
   maintainAspectRatio: false
 };
 
+const sortedData = computed(() => {
+  return props.data;
+})
+
 const chartData = computed(() => {
+  const labels = sortedData.value.map(item => item.label);
+  const values = sortedData.value.map(item => item.value);
+
   return {
-    labels: props.labels,
+    labels: labels,
     datasets: [{
-      data: props.values,
+      data: values,
       backgroundColor: theme.global.current.value.colors.primary,
     }]
   }

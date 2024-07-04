@@ -2,16 +2,14 @@
   <v-container class="dashboard-view-container">
     <LineChart
       title="Sales"
-      :labels="salesData.labels"
-      :values="salesData.values"
+      :data="salesData"
       :loading="isSalesDataLoading"
     />
 
     <BarChart
       class="mt-4"
       title="Expense"
-      :labels="expenseData.labels"
-      :values="expenseData.values"
+      :data="expenseData"
       :loading="isExpenseDataLoading"
     />
   </v-container>
@@ -23,19 +21,15 @@ import MockApiService from "@/shared/MockApiService";
 import { ref, onBeforeMount } from 'vue';
 import { SalesList, ExpenseList } from "@/shared/MockApiService.types";
 
-import BarChart from '@/components/BarChart.vue';
-import LineChart from '@/components/LineChart.vue';
+import BarChart, { BarChartPoint } from '@/components/BarChart.vue';
+import LineChart, { LineChartPoint } from '@/components/LineChart.vue';
 
 // Fetch sales data
 
 onBeforeMount(fetchSalesData);
 
+const salesData = ref<LineChartPoint[]>([]);
 const isSalesDataLoading = ref<boolean>(false);
-
-const salesData = ref<{ labels: string[]; values: number[] }>({
-  labels: [],
-  values: []
-});
 
 async function fetchSalesData() {
   isSalesDataLoading.value = true;
@@ -52,20 +46,20 @@ async function fetchSalesData() {
 }
 
 function setSalesData(salesList: SalesList) {
-  salesData.value.labels = salesList.map(salesItem => salesItem.month);
-  salesData.value.values = salesList.map(salesItem => salesItem.sales);
+  salesData.value = salesList.map(salesItem => {
+    return {
+      label: salesItem.month,
+      value: salesItem.sales,
+    }
+  })
 }
 
 // Fetch expense data
 
 onBeforeMount(fetchExpenseData);
 
+const expenseData = ref<BarChartPoint[]>([]);
 const isExpenseDataLoading = ref<boolean>(false);
-
-const expenseData = ref<{ labels: string[]; values: number[] }>({
-  labels: [],
-  values: []
-});
 
 async function fetchExpenseData() {
   isExpenseDataLoading.value = true;
@@ -81,9 +75,13 @@ async function fetchExpenseData() {
   isExpenseDataLoading.value = false;
 }
 
-function setExpenseData(salesList: ExpenseList) {
-  expenseData.value.labels = salesList.map(salesItem => salesItem.category);
-  expenseData.value.values = salesList.map(salesItem => salesItem.amount);
+function setExpenseData(expenseList: ExpenseList) {
+  expenseData.value = expenseList.map(expenseItem => {
+    return {
+      label: expenseItem.category,
+      value: expenseItem.amount,
+    }
+  })
 }
 </script>
 

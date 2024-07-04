@@ -26,10 +26,14 @@ Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Too
 
 // Props
 
+export type LineChartPoint = {
+  label: string;
+  value: number;
+};
+
 const props = defineProps<{
+  data: LineChartPoint[];
   title: string;
-  labels: string[];
-  values: number[];
   loading?: boolean;
 }>();
 
@@ -42,11 +46,18 @@ const chartConfig = {
   maintainAspectRatio: false
 };
 
+const sortedData = computed(() => {
+  return props.data;
+})
+
 const chartData = computed(() => {
+  const labels = sortedData.value.map(item => item.label);
+  const values = sortedData.value.map(item => item.value);
+
   return {
-    labels: props.labels,
+    labels,
     datasets: [{
-      data: props.values,
+      data: values,
       tension: 0.1,
       borderColor: theme.global.current.value.colors.primary,
     }]

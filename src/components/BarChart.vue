@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
+import { useTheme } from 'vuetify';
 
 import { Bar } from 'vue-chartjs';
 import { Chart, Title, Tooltip, BarElement, CategoryScale, LinearScale } from 'chart.js';
@@ -30,6 +31,8 @@ const props = defineProps<{
 
 // Chart
 
+const theme = useTheme();
+
 const chartConfig = {
   responsive: true,
   maintainAspectRatio: false
@@ -40,7 +43,7 @@ const chartData = computed(() => {
     labels: props.labels,
     datasets: [{
       data: props.values,
-      backgroundColor: 'rgb(75, 192, 192)',
+      backgroundColor: theme.global.current.value.colors.primary,
     }]
   }
 });

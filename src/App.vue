@@ -7,5 +7,5 @@
 </template>
 
 <script setup lang="ts">
-import DashboardView from "@/views/DashboґardView.vue";
+import DashboardView from "@/views/DashboardView.vue";
 </script>
